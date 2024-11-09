@@ -1,32 +1,40 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CustomText } from '../../Components';
-import { useTheme } from '../temadark'; // Importando o hook do tema global
+import { useTheme } from '../temadark';
 
 export const Signup = () => {
   const navigation = useNavigation();
-  const { darkMode, toggleTheme } = useTheme(); // Usando o tema global
-  const [fullName, setFullName] = useState(''); // Nome completo
-  const [email, setEmail] = useState(''); // E-mail
-  const [password, setPassword] = useState(''); // Senha
-  const [confirmPassword, setConfirmPassword] = useState(''); // Confirmar senha
+  const { darkMode, toggleTheme } = useTheme();
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const entrar = () => {
-    console.log('ENTROU');
+  const loginWithGoogle = () => {
+    console.log('Login com Google');
+  };
+
+  const navigateNext = () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Erro', 'As senhas não coincidem!');
+      return;
+    }
+    console.log('Navegando para a próxima tela');
   };
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? 'black' : 'white' }]}>
       <View style={styles.TopButton}>
-      
         <Button
           icon={<Ionicons name={darkMode ? "sunny" : "moon-outline"} size={40} color={darkMode ? 'white' : 'black'} />}
           type="clear"
-          onPress={toggleTheme} // Usando a função para alternar o tema
+          onPress={toggleTheme}
         />
       </View>
 
@@ -37,6 +45,7 @@ export const Signup = () => {
         placeholderTextColor={darkMode ? '#bbb' : '#888'}
         leftIcon={{ type: 'font-awesome', name: 'user', color: darkMode ? '#bbb' : '#888' }}
         onChangeText={value => setFullName(value)}
+        value={fullName}
         inputStyle={{ color: darkMode ? 'white' : 'black' }}
       />
 
@@ -46,6 +55,7 @@ export const Signup = () => {
         leftIcon={{ type: 'font-awesome', name: 'envelope', color: darkMode ? '#bbb' : '#888' }}
         onChangeText={value => setEmail(value)}
         keyboardType="email-address"
+        value={email}
         inputStyle={{ color: darkMode ? 'white' : 'black' }}
       />
       
@@ -54,8 +64,17 @@ export const Signup = () => {
         placeholderTextColor={darkMode ? '#bbb' : '#888'}
         leftIcon={{ type: 'font-awesome', name: 'lock', color: darkMode ? '#bbb' : '#888' }}
         onChangeText={value => setPassword(value)}
-        secureTextEntry={true}
+        secureTextEntry={!showPassword}
+        value={password}
         inputStyle={{ color: darkMode ? 'white' : 'black' }}
+        rightIcon={
+          <Ionicons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color={darkMode ? 'white' : 'black'}
+            onPress={() => setShowPassword(!showPassword)}
+          />
+        }
       />
 
       <Input
@@ -63,20 +82,29 @@ export const Signup = () => {
         placeholderTextColor={darkMode ? '#bbb' : '#888'}
         leftIcon={{ type: 'font-awesome', name: 'lock', color: darkMode ? '#bbb' : '#888' }}
         onChangeText={value => setConfirmPassword(value)}
-        secureTextEntry={true}
+        secureTextEntry={!showPassword}
+        value={confirmPassword}
         inputStyle={{ color: darkMode ? 'white' : 'black' }}
+        rightIcon={
+          <Ionicons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color={darkMode ? 'white' : 'black'}
+            onPress={() => setShowPassword(!showPassword)}
+          />
+        }
       />
 
       <View style={styles.buttonContainer}>
         <Button
           icon={<Icon name="google" size={50} color="white" />}
           buttonStyle={[styles.button, { backgroundColor: darkMode ? '#444' : '#007BFF' }]}
-          onPress={entrar}
+          onPress={loginWithGoogle}
         />
         <Button
           icon={<Icon name="arrow-right" size={40} color="white" />}
           buttonStyle={[styles.button, { backgroundColor: darkMode ? '#444' : '#007BFF' }]}
-          onPress={entrar}
+          onPress={navigateNext}
         />
       </View>
 

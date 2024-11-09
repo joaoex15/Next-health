@@ -8,10 +8,11 @@ import { CustomText, Logo } from '../../Components';
 import { useTheme } from '../temadark'; // Importando o hook do tema global
 
 export const Login = () => {
-  const navigation = useNavigation(); // Adicione esta linha
-  const [email, setEmail] = useState(''); // Inicializado como string vazia
-  const [password, setPassword] = useState(''); // Inicializado como string vazia
-  const { darkMode, toggleTheme } = useTheme(); // Usando o tema global
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Estado para controle de visibilidade da senha
+  const { darkMode, toggleTheme } = useTheme();
 
   const entrar = () => {
     console.log('ENTROU');
@@ -44,8 +45,16 @@ export const Login = () => {
         placeholder="Sua senha"
         placeholderTextColor={darkMode ? '#bbb' : '#888'}
         leftIcon={{ type: 'font-awesome', name: 'lock', color: darkMode ? '#bbb' : '#888' }}
+        rightIcon={
+          <Ionicons
+            name={isPasswordVisible ? 'eye-off' : 'eye'}
+            size={24}
+            color={darkMode ? '#bbb' : '#888'}
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)} // Alterna a visibilidade
+          />
+        }
         onChangeText={value => setPassword(value)}
-        secureTextEntry={true}
+        secureTextEntry={!isPasswordVisible} // Controla a visibilidade
         value={password} // Adicionando value para o controle do estado
         inputStyle={{ color: darkMode ? 'white' : 'black' }}
       />
