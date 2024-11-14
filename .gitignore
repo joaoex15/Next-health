@@ -33,9 +33,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
- 
 
-#api
-../Api/config
-../Api/node_modules
-../segurança
+# api
+Api/config/
+Api/node_modules/
+Api/segurança/
