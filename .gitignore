@@ -37,4 +37,4 @@ yarn-error.*
 # api
 Api/config/
 Api/node_modules/
-Api/segurança/
+Api/segurança
