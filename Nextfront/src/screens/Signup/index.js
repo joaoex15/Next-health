@@ -4,6 +4,7 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { registerUser } from '../../../services/api'; // Importando a função registerUser da API
 import { CustomText } from '../../Components';
 import { useTheme } from '../temadark';
 
@@ -20,13 +21,27 @@ export const Signup = () => {
     console.log('Login com Google');
   };
 
-  const navigateNext = () => {
+  const navigateNext = async () => {
     if (password !== confirmPassword) {
       Alert.alert('Erro', 'As senhas não coincidem!');
       return;
     }
-    console.log('Navegando para a próxima tela');
+  
+    try {
+      const response = await registerUser(email, password, fullName); // Chama a função da API
+      if (response.error) {
+        // Caso a API retorne um erro
+        Alert.alert('Erro', response.error); // Exibe a mensagem de erro retornada pela API
+      } else {
+        Alert.alert('Sucesso', response.message || 'Cadastro realizado com sucesso!'); // Exibe a mensagem de sucesso
+        navigation.navigate('Login'); // Navega para a tela de login após sucesso
+      }
+    } catch (error) {
+      console.error('Erro na API:', error);
+      Alert.alert('Erro', 'Erro inesperado ao realizar o cadastro. Tente novamente mais tarde.');
+    }
   };
+  
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? 'black' : 'white' }]}>
@@ -104,7 +119,7 @@ export const Signup = () => {
         <Button
           icon={<Icon name="arrow-right" size={40} color="white" />}
           buttonStyle={[styles.button, { backgroundColor: darkMode ? '#444' : '#007BFF' }]}
-          onPress={navigateNext}
+          onPress={navigateNext} // Chama a função de cadastro
         />
       </View>
 

@@ -1,29 +1,30 @@
+import cors from 'cors';
 import express from 'express';
-import admin from 'firebase-admin';
-import cadastrarRouter from './cadastrar.js';
-import serviceAccount from './config/serviceAccountKey.json' assert { type: 'json' }; // Corrigido para a sintaxe ES Module
-import loginRouter from './login.js';
-
-// Inicializa o Firebase Admin com a chave de serviço
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-// Acessa o Firestore
-const db = admin.firestore();
 
 const app = express();
+const port = 3000;
+
+// Middleware para permitir CORS
+app.use(cors());
+
+// Middleware para interpretar JSON
 app.use(express.json());
 
-// Usando os routers para cadastro e login
-app.use('/cadastrar', cadastrarRouter);
-app.use('/login', loginRouter);
+// Importar rotas
+import cadastroRoutes from './routes/cadastro.js';
+import loginRoutes from './routes/login.js';
+import recuperarSenhaRoutes from './routes/recupera_senha.js';
 
-// Rota de teste para verificar se o servidor está funcionando
-app.get('/', (req, res) => {
-  res.send('API está funcionando');
+// Usar as rotas
+app.use('/cadastro', cadastroRoutes);
+app.use('/login', loginRoutes);
+app.use('/recuperar-senha', recuperarSenhaRoutes);
+
+app.get('/users', (req, res) => {
+  res.send('ok vamos tentar');
 });
 
-app.listen(3000, () => {
-  console.log('Servidor rodando na porta 3000');
+// Iniciar o servidor
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
 });
