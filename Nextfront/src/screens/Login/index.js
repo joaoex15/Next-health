@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { loginUser } from '../../../services/api'; // Importe a função de login da API
 import { CustomText, Logo } from '../../Components';
 import { useTheme } from '../temadark'; // Importando o hook do tema global
-
 export const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -14,9 +14,16 @@ export const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Estado para controle de visibilidade da senha
   const { darkMode, toggleTheme } = useTheme();
 
-  const entrar = () => {
-    console.log('ENTROU');
-    // Aqui você pode adicionar a lógica para autenticação ou navegação
+  const entrar = async () => {
+    try {
+      const userData = await loginUser(email, password); // Chama a API de login
+      Alert.alert('Sucesso', 'Login realizado com sucesso!');
+      console.log('Usuário logado:', userData);
+      navigation.navigate('Home'); // Navega para a tela inicial (ou outra apropriada)
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      Alert.alert('Erro', 'Credenciais inválidas. Por favor, tente novamente.');
+    }
   };
 
   return (
