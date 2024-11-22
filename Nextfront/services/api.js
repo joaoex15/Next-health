@@ -23,26 +23,27 @@ const API_URL = 'https://e2ad-2804-14c-4384-96ca-00-1002.ngrok-free.app'; // Exe
     throw error.response?.data || error.message; // Lança o erro para ser tratado no chamador
   }
 };
-
-export const loginUser = async (email, password) => {
+ export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login/users`, {
       email,
       password,
     });
 
-    if (response.status === 200) {
-      console.log('Login bem-sucedido!');
-      return response.data; // Dados do usuário ou token
+    // Verificando se a resposta da API foi bem-sucedida
+    if (response.status === 200 && response.data) {
+      // Caso o login seja bem-sucedido, retorne a resposta ou dados do usuário, sem token
+      return response;  // Retorna os dados do usuário, sem enviar um token
+    } else {
+      throw new Error('Falha no login: credenciais inválidas.');
     }
-
-    throw new Error('Falha no login. Tente novamente.');
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Erro inesperado ao fazer login.';
-    console.error('Erro no login:', errorMessage);
-    throw errorMessage;
+    console.error('Erro na requisição de login:', error);
+    throw new Error('Erro inesperado ao tentar fazer login.');
   }
 };
+
+
 
 export const resetPassword = async (email) => {
   try {

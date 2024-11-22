@@ -18,6 +18,7 @@ import recuperarSenhaRoutes from './routes/recupera_senha.js';
 // Usar as rotas
 app.use('/cadastro', cadastroRoutes);
 app.use('/login', loginRoutes);
+
 app.use('/recuperar-senha', recuperarSenhaRoutes);
 
 app.get('/users', (req, res) => {

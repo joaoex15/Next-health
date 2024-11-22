@@ -16,15 +16,25 @@ export const Login = () => {
 
   const entrar = async () => {
     try {
-      const userData = await loginUser(email, password); // Chama a API de login
-      Alert.alert('Sucesso', 'Login realizado com sucesso!');
-      console.log('Usuário logado:', userData);
-      navigation.navigate('Home'); // Navega para a tela inicial (ou outra apropriada)
+      Alert.alert('Aguarde', 'Processando seu login...');
+      const response = await loginUser(email, password);  // Fazendo a requisição de login
+  
+      // Verificando se o login foi bem-sucedido
+      if (response && response.status === 200) {
+        Alert.alert('Sucesso', 'Login realizado com sucesso!');
+        console.log('Usuário logado:', response.data);  // Aqui você pode processar a resposta da API
+        navigation.navigate('Home');  // Redirecionando para a página inicial
+      } else {
+        throw new Error('Falha no login. Verifique suas credenciais.');
+      }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      Alert.alert('Erro', 'Credenciais inválidas. Por favor, tente novamente.');
+      Alert.alert('Erro', error.message || 'Credenciais inválidas. Por favor, tente novamente.');
     }
   };
+  
+  
+  
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? 'black' : 'white' }]}>
