@@ -16,7 +16,7 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/login', async (req, res) => {
+app.post('/users', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -42,7 +42,7 @@ app.post('/login', async (req, res) => {
     res.status(200).json({ uid: userDoc.id, token: customToken });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro ao fazer login' });
+    res.status(500).json({ error: '  o erro não é na api n bem Erro ao fazer login' });
   }
 });
 

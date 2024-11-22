@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Alert } from 'react-native'; // Adicione esta linha
-const API_URL = 'https://307a-2804-14c-4384-96ca-00-1002.ngrok-free.app'; // Exemplo de IP local da sua máquina
+const API_URL = 'https://e2ad-2804-14c-4384-96ca-00-1002.ngrok-free.app'; // Exemplo de IP local da sua máquina
  // Altere para o endereço correto
 
  export const registerUser = async (email, password, name) => {
@@ -24,17 +24,23 @@ const API_URL = 'https://307a-2804-14c-4384-96ca-00-1002.ngrok-free.app'; // Exe
   }
 };
 
-
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login/users`, {
       email,
       password,
     });
-    return response.data;
+
+    if (response.status === 200) {
+      console.log('Login bem-sucedido!');
+      return response.data; // Dados do usuário ou token
+    }
+
+    throw new Error('Falha no login. Tente novamente.');
   } catch (error) {
-    console.error('Erro no login:', error.response?.data || error.message);
-    throw error.response?.data || error.message;
+    const errorMessage = error.response?.data?.message || 'Erro inesperado ao fazer login.';
+    console.error('Erro no login:', errorMessage);
+    throw errorMessage;
   }
 };
 
