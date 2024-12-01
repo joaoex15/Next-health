@@ -1,30 +1,32 @@
 import express from 'express';
-import admin from '../firebaseConfig.js'; // Instância do Firebase Admin SDK já inicializada
+import admin from '../firebaseConfig.js'; // Importa a instância do Firebase Admin SDK
 
 const router = express.Router();
 
+// Rota de login de usuários
 router.post('/users', async (req, res) => {
   try {
-    const { email, password } = req.body; // E-mail e senha enviados pelo frontend
+    const { idToken } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: 'E-mail e senha são necessários' });
+    if (!idToken) {
+      return res.status(400).json({ error: 'Token de autenticação não fornecido' });
     }
 
-    // Aqui você pode utilizar a autenticação do Firebase para verificar as credenciais do usuário
-    const userRecord = await admin.auth().getUserByEmail(email);
+    // Verifica o ID token enviado pelo cliente
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
 
-    // Verifique se a senha enviada corresponde à que foi registrada
-    // Para esse exemplo, a verificação da senha seria realizada de maneira simples, mas o ideal seria usar um sistema como bcrypt
-    // Ou então autenticação de outra forma
+    if (!decodedToken) {
+      return res.status(401).json({ error: 'Token inválido ou expirado' });
+    }
 
-    // Aqui você pode verificar a senha em seu banco de dados ou outro serviço que esteja utilizando
-
-    // Se a autenticação for bem-sucedida, você pode retornar os dados do usuário
-    return res.status(200).json({ uid: userRecord.uid, message: 'Login bem-sucedido' });
+    // O usuário está autenticado
+    res.status(200).json({
+      message: 'Login realizado com sucesso',
+      uid: decodedToken.uid, // O UID do usuário autenticado
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Erro ao autenticar usuário' });
+    return res.status(500).json({ error: 'Erro ao verificar token' });
   }
 });
 

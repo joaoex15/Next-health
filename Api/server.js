@@ -11,19 +11,14 @@ app.use(cors());
 app.use(express.json());
 
 // Importar rotas
+import authRoutes from './routes/auth.js'; // Usar as rotas
 import cadastroRoutes from './routes/cadastro.js';
 import loginRoutes from './routes/login.js';
 import recuperarSenhaRoutes from './routes/recupera_senha.js';
-
-// Usar as rotas
 app.use('/cadastro', cadastroRoutes);
 app.use('/login', loginRoutes);
-
-app.use('/recuperar-senha', recuperarSenhaRoutes);
-
-app.get('/users', (req, res) => {
-  res.send('ok vamos tentar');
-});
+app.use('/credecias', authRoutes); 
+app.use('/recuperarsenha', recuperarSenhaRoutes);
 
 // Iniciar o servidor
 app.listen(port, () => {

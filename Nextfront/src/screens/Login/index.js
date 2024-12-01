@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { loginUser } from '../../../services/api'; // Importe a função de login da API
 import { CustomText, Logo } from '../../Components';
 import { useTheme } from '../temadark'; // Importando o hook do tema global
+
 export const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -17,13 +18,15 @@ export const Login = () => {
   const entrar = async () => {
     try {
       Alert.alert('Aguarde', 'Processando seu login...');
-      const response = await loginUser(email, password);  // Fazendo a requisição de login
-  
+     
+      // Fazendo a requisição de login
+      const idToken = await loginUser(email, password);
+      Alert.alert('foi');
       // Verificando se o login foi bem-sucedido
-      if (response && response.status === 200) {
+      if (idToken) {
         Alert.alert('Sucesso', 'Login realizado com sucesso!');
-        console.log('Usuário logado:', response.data);  // Aqui você pode processar a resposta da API
-        navigation.navigate('Home');  // Redirecionando para a página inicial
+        console.log('Usuário logado com ID Token:', idToken); // Aqui você pode processar o token
+        navigation.navigate('Home'); // Redirecionando para a página inicial
       } else {
         throw new Error('Falha no login. Verifique suas credenciais.');
       }
@@ -32,9 +35,6 @@ export const Login = () => {
       Alert.alert('Erro', error.message || 'Credenciais inválidas. Por favor, tente novamente.');
     }
   };
-  
-  
-  
 
   return (
     <View style={[styles.container, { backgroundColor: darkMode ? 'black' : 'white' }]}>

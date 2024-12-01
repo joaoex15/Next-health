@@ -6,6 +6,7 @@ const db = admin.firestore(); // Usando Firestore do Firebase inicializado
 
 const router = express.Router();
 
+// Rota de cadastro de usuários
 router.post('/users', async (req, res) => {
   try {
     const { email, password, name } = req.body;
@@ -44,5 +45,4 @@ router.post('/users', async (req, res) => {
     }
   }
 });
-
 export default router; // Exporta o router como default

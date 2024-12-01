@@ -11,5 +11,7 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount),
   });
 }
+export const auth = admin.auth();
+
 
 export default admin; // Exporta o Firebase inicializado
